@@ -31,5 +31,25 @@ Compare these 3 models on tabular and image data:
 | Naive Bayes | 0.190000 | 0.226502 | 0.190000 | 0.163465 |
 
 ## Run
-- Notebook: `ML_Algorithms_Comparison.ipynb`
-- Script: `run_comparison.py`
+
+### Notebook (Training + Model Saving)
+- Open `ML_Algorithms_Comparison.ipynb`
+- Run all cells from top to bottom
+- The notebook trains models and saves them to:
+	- `saved_models/tabular/`
+	- `saved_models/image/`
+
+### Flask App (UI + Inference)
+- Go to `flask_app/`
+- Install dependencies:
+	- `pip install -r requirements.txt`
+- Run app:
+	- `python app.py`
+- Open in browser:
+	- `http://127.0.0.1:5000`
+
+The Flask app has:
+- A Tabular tab for business-feature input
+- An Image tab for fruit image upload
+- Model switching for both tabs
+- Prediction confidence visualization
