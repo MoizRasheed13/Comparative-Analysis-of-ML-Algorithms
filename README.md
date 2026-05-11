@@ -1,55 +1,134 @@
-# Classical ML Comparison (College Assignment)
+# Classical ML Comparison On Tabular And Image Data
 
-This project is a college assignment created to understand how different classical ML models behave on different data types.
+## Assignment Context
+This repository is a college assignment submission created to understand how different classical machine learning models behave on different data types.
 
-## Objective
-Compare these 3 models on tabular and image data:
-- K-Nearest Neighbors
+The same three algorithms are tested on:
+- Tabular business data
+- Image-based fruit classification data
+
+Target models:
+- K-Nearest Neighbors (KNN)
 - Decision Tree
 - Naive Bayes
 
-## Datasets
-- Tabular: `Superstore Dataset.csv`
-- Image: fruit dataset in `MY_data/train` (Apple, avocado, Banana, cherry, kiwi, mango, orange, pinenapple, strawberries, watermelon)
+## Assignment Objective
+1. Build complete preprocessing pipelines for tabular and image data.
+2. Train and evaluate KNN, Decision Tree, and Naive Bayes on both datasets.
+3. Compare the behavior of classical ML across structured and visual inputs.
+4. Save trained models and expose them through a simple Flask web interface.
 
-## Results Shared
+## Project Files
+- `ML_Algorithms_Comparison.ipynb`: Main assignment notebook (full workflow, results, and model saving).
+- `flask_app/`: Web app for inference from UI.
+- `saved_models/tabular/`: Saved tabular models.
+- `saved_models/image/`: Saved image models.
+- `Superstore Dataset.csv`: Tabular dataset.
+- `MY_data/train/`: Fruit image dataset.
+
+## Dataset Details
+
+### 1) Tabular Dataset
+- File: `Superstore Dataset.csv`
+- Task: Predict `Ship Mode`
+- Base input columns used:
+  - Sales, Quantity, Discount, Profit, Segment, Region
+
+### 2) Image Dataset
+- Folder: `MY_data/train`
+- Task: Fruit image classification
+- Classes:
+  - Apple, avocado, Banana, cherry, kiwi, mango, orange, pinenapple, strawberries, watermelon
+
+## Methodology
+
+### Tabular Preprocessing
+1. Remove missing rows from selected columns.
+2. Feature engineering:
+	- `Sales_log`
+	- `Profit_signed_log`
+	- `UnitPrice`
+	- `DiscountAmount`
+	- `ProfitMargin`
+3. One-hot encoding for `Segment` and `Region`.
+4. Stratified train/test split.
+5. Robust scaling (`RobustScaler`) before model training.
+
+### Image Preprocessing
+1. Load and resize RGB images.
+2. Build compact handcrafted feature vectors using:
+	- RGB histograms
+	- HSV histograms
+	- Low-resolution grayscale shape descriptor
+	- Gradient-based texture summary
+3. Encode class labels.
+4. Stratified train/test split.
+
+## Model Configuration
+
+### Tabular Models
+- KNN: `n_neighbors=11`, `weights='distance'`, `metric='manhattan'`
+- Decision Tree: `max_depth=14`, `min_samples_leaf=4`, `class_weight='balanced'`
+- Naive Bayes: `var_smoothing=1e-7`
+
+### Image Models
+- KNN Pipeline: `StandardScaler + PCA(120) + KNN`
+- Decision Tree: `max_depth=18`, `min_samples_leaf=3`, `class_weight='balanced'`
+- Naive Bayes Pipeline: `StandardScaler + PCA(100) + GaussianNB`
+
+## Evaluation Metrics
+The assignment reports:
+- Accuracy
+- Precision (weighted)
+- Recall (weighted)
+- F1-Score (weighted)
+
+## Final Results (Latest Notebook Run)
 
 ### Tabular Data Results
 
 | Model | Accuracy | Precision | Recall | F1-Score |
 |---|---:|---:|---:|---:|
-| K-Nearest Neighbors | 0.474237 | 0.442097 | 0.474237 | 0.456354 |
-| Decision Tree | 0.411706 | 0.432905 | 0.411706 | 0.421596 |
-| Naive Bayes | 0.615808 | 0.420299 | 0.615808 | 0.473205 |
+| K-Nearest Neighbors | 0.527764 | 0.422858 | 0.527764 | 0.455511 |
+| Decision Tree | 0.261631 | 0.426041 | 0.261631 | 0.295272 |
+| Naive Bayes | 0.558779 | 0.400417 | 0.558779 | 0.450950 |
 
 ### Image Data Results
 
 | Model | Accuracy | Precision | Recall | F1-Score |
 |---|---:|---:|---:|---:|
-| K-Nearest Neighbors | 0.165000 | 0.170922 | 0.165000 | 0.150764 |
-| Decision Tree | 0.168333 | 0.170522 | 0.168333 | 0.168783 |
-| Naive Bayes | 0.190000 | 0.226502 | 0.190000 | 0.163465 |
+| K-Nearest Neighbors | 0.328509 | 0.332056 | 0.328509 | 0.322713 |
+| Decision Tree | 0.322721 | 0.329484 | 0.322721 | 0.324710 |
+| Naive Bayes | 0.269175 | 0.316730 | 0.269175 | 0.265701 |
 
-## Run
+## Interpretation
+1. Tabular data gives stronger performance with classical ML due to structured numerical patterns.
+2. Image results improve after feature engineering but remain lower than tabular.
+3. This demonstrates that classical ML depends heavily on input representation quality, especially for images.
 
-### Notebook (Training + Model Saving)
-- Open `ML_Algorithms_Comparison.ipynb`
-- Run all cells from top to bottom
-- The notebook trains models and saves them to:
+## How To Run
+
+### Notebook (Training + Saving Models)
+1. Open `ML_Algorithms_Comparison.ipynb`.
+2. Run all cells in order.
+3. Models are saved to:
 	- `saved_models/tabular/`
 	- `saved_models/image/`
 
-### Flask App (UI + Inference)
-- Go to `flask_app/`
-- Install dependencies:
+### Flask App (Inference UI)
+1. Go to `flask_app/`
+2. Install dependencies:
 	- `pip install -r requirements.txt`
-- Run app:
+3. Run server:
 	- `python app.py`
-- Open in browser:
+4. Open:
 	- `http://127.0.0.1:5000`
 
-The Flask app has:
-- A Tabular tab for business-feature input
-- An Image tab for fruit image upload
-- Model switching for both tabs
+UI features:
+- Tabular and Image tabs
+- Model switching
+- Input guidance text and sample ranges
 - Prediction confidence visualization
+
+## Conclusion
+This assignment successfully demonstrates how the same classical ML models behave differently on tabular vs image data, why preprocessing quality matters, and how trained models can be deployed in a simple interactive Flask application.
